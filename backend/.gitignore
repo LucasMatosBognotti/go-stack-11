@@ -1,0 +1,10 @@
+node_modules
+dist
+./idea/
+build
+coverage
+.env
+tmp/uploads/*
+!tmp/.gitkeep
+yarn.lock
+ormconfig.json

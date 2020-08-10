@@ -1,0 +1,73 @@
+import { injectable, inject } from 'tsyringe';
+
+import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '../providers/HashProviser/models/IHashProvider';
+
+import User from '../infra/typeorm/entities/User';
+
+import AppError from '../../../shared/errors/AppError';
+
+interface IResquest {
+  user_id: string;
+  name: string;
+  email: string;
+  old_password?: string;
+  password?: string;
+}
+
+@injectable()
+class UpdateProfileService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepositoty: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
+  ) {}
+
+  public async execute({
+    user_id,
+    name,
+    email,
+    old_password,
+    password,
+  }: IResquest): Promise<User> {
+    const user = await this.usersRepositoty.findById(user_id);
+
+    if (!user) {
+      throw new AppError('User does not exists');
+    }
+
+    const userWithUpdatedEmail = await this.usersRepositoty.findByEmail(email);
+
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user_id) {
+      throw new AppError('Email already in use');
+    }
+
+    user.name = name;
+    user.email = email;
+
+    if (password && !old_password) {
+      throw new AppError(
+        'You need to inform the old password to set a new password',
+      );
+    }
+
+    if (password && old_password) {
+      const checkOldPassword = await this.hashProvider.compareHash(
+        old_password,
+        user.password,
+      );
+
+      if (!checkOldPassword) {
+        throw new AppError('Old password does not match');
+      }
+
+      user.password = await this.hashProvider.generateHah(password);
+    }
+
+    return this.usersRepositoty.save(user);
+  }
+}
+
+export default UpdateProfileService;
