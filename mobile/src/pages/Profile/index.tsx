@@ -14,6 +14,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import ImagePicker from 'react-native-image-picker';
 import * as Yup from 'yup';
 
+import avatar from '../../assets/avatar.png';
+
 import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
 
@@ -60,7 +62,6 @@ const Profile: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (data: ProfileFormData) => {
-      console.log(data);
       try {
         formRef.current?.setErrors({});
 
@@ -183,7 +184,13 @@ const Profile: React.FC = () => {
             </ContainerButton>
             
             <UserAvatarButton onPress={handleUpdateAvatar}>
-              <UserAvatar source={{uri: user.avatar_url}} />
+              {
+                user.avatar_url ? (
+                  <UserAvatar source={{uri: user.avatar_url}} />
+                ) : (
+                  <UserAvatar source={avatar} />
+                )
+              }
             </UserAvatarButton>
 
             <View>
