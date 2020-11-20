@@ -5,6 +5,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from 'react-icons/fi';
 import * as Yup from 'yup';
 
+import avatar from '../../assets/avatar.png';
+
 import { useToast } from '../../hooks/ToastContext';
 import { useAuth } from '../../hooks/AuthContext';
 
@@ -147,7 +149,8 @@ const Profile: React.FC = () => {
           }}
         >
           <AvatarInput>
-            <img src={user.avatar_url} alt={user.name} />
+            <img src={user.avatar_url ? user.avatar_url : avatar} alt="Avatar" />
+
             <label htmlFor="avatar">
               <FiCamera />
 

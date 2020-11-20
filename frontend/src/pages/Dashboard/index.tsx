@@ -6,6 +6,8 @@ import { FiPower, FiClock, FiUser } from 'react-icons/fi';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
+import avatar from '../../assets/avatar.png';
+
 import { useAuth } from '../../hooks/AuthContext';
 
 import api from '../../services/api';
@@ -140,7 +142,7 @@ const Dashboard: React.FC = () => {
           <img src={logoImg} alt="GoBarber" />
 
           <Profile>
-            <img src={user.avatar_url} alt="Avatar" />
+            <img src={user.avatar_url ? user.avatar_url : avatar} alt="Avatar" />
 
             <div>
               <span>Bem-Vindo</span>

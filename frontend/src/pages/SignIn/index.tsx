@@ -85,6 +85,7 @@ const SignIn: React.FC = () => {
               icon={FiLock}
               type="password"
               placeholder="Senha"
+              autoComplete="off"
             />
 
             <Button type="submit">Entrar</Button>
